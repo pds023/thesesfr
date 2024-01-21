@@ -2,10 +2,12 @@
 #'
 #' @param input,output,session Internal parameters for {shiny}.
 #'     DO NOT REMOVE.
-#' @import shiny
+#' @import shiny aws.s3 arrow
 #' @noRd
 app_server <- function(input, output, session) {
   options(warn = -1)
+
+  source("set_cfg.R")
 
   data <- reactiveVal()
   data_filtered <- reactiveVal()
@@ -38,14 +40,23 @@ app_server <- function(input, output, session) {
 
   data(as.data.table(read.fst(path = "data/theses-soutenues-compact-light.fst")))
 
-  output$signalconsometh <- renderText({
-    includeMarkdown("inst/app/www/signalconsometh.md")
+  ratings <- s3read_using(
+    read_parquet,
+    object = "ratings.parquet",
+    bucket = "awsbucketpf/thesesfr"
+  )
+  suggestions <- s3read_using(
+    read_parquet,
+    object = "suggestions.parquet",
+    bucket = "awsbucketpf/thesesfr"
+  )
+
+
+  output$thesesfrmeth <- renderText({
+    includeMarkdown("inst/app/www/thesesfrmeth.md")
   })
   output$apropos <- renderText({
     includeMarkdown("inst/app/www/apropos.md")
-  })
-  output$avenir <- renderText({
-    includeMarkdown("inst/app/www/avenir.md")
   })
 
   output$ratings <- renderUI(shinyRatings("ratings_click", no_of_stars = 5, default = 5, disabled = FALSE))
@@ -61,12 +72,14 @@ app_server <- function(input, output, session) {
                                    easyClose = TRUE,size = "s"))
       }
       print(input$ratings_click)
-      write_parquet(as.data.table(cbind(as.Date(Sys.time()),input$ratings_click)),paste0("data/rating_",
-                                                                                         gsub(
-                                                                                           pattern = " ",
-                                                                                           replacement = "-",
-                                                                                           x = gsub(pattern = ":",x = Sys.time(),replacement = "-"))))
-    }
+      ratings <- as.data.table(rbind(ratings,cbind(as.character(Sys.Date()),input$ratings_click)))
+      s3write_using(
+        x = ratings,
+        FUN = write_parquet,
+        object = "ratings.parquet",
+        bucket = "awsbucketpf/thesesfr"
+      )
+      }
     nb_rating(nb_rating() + 1)
   })
 
@@ -84,13 +97,14 @@ app_server <- function(input, output, session) {
   observeEvent(input$ok,{
     removeModal()
     show_alert(title = "Merci pour votre suggestion !",type = "success")
-    print(input$suggestion_text)
-    write_parquet(as.data.table(cbind(as.Date(Sys.time()),input$suggestion_text)),paste0("data/suggestion_",
-                                                                                         gsub(
-                                                                                           pattern = " ",
-                                                                                           replacement = "-",
-                                                                                           x = gsub(pattern = ":",x = Sys.time(),replacement = "-"))))
-  })
+    suggestions <- as.data.table(rbind(suggestions,cbind(as.character(Sys.Date()),input$suggestion_text)))
+    s3write_using(
+      x = suggestions,
+      FUN = write_parquet,
+      object = "suggestions.parquet",
+      bucket = "awsbucketpf/thesesfr"
+    )
+    })
 
   observe({
     if(is.null(data())){return(NULL)
@@ -188,9 +202,35 @@ app_server <- function(input, output, session) {
 
   observe({
     if(!filters_applied()){
-      output$exploration_donnees_brutes <- create_dt(data(),length =  10)
+      output$exploration_donnees_brutes <- create_dt(data()[,.(auteur.nom,
+                                                               auteur.prenom,
+                                                               date_soutenance,
+                                                               discipline,
+                                                               titres.fr,
+                                                               nnt)],length =  10,
+                                                     cols_names = c("Nom","Prénom","Date","Discipline","Sujet","Id"))
+      output$download_data <- dl_button_serv(data()[,.(auteur.nom,
+                                                             auteur.prenom,
+                                                             date_soutenance,
+                                                             discipline,
+                                                             titres.fr,
+                                                             nnt)],
+                                             label = "data_theses")
     } else{
-      output$exploration_donnees_brutes <- create_dt(data_filtered(), length = 10)
+      output$exploration_donnees_brutes <- create_dt(data_filtered()[,.(auteur.nom,
+                                                               auteur.prenom,
+                                                               date_soutenance,
+                                                               discipline,
+                                                               titres.fr,
+                                                               nnt)],length =  10,
+                                                     cols_names = c("Nom","Prénom","Date","Discipline","Sujet","Id"))
+      output$download_data <- dl_button_serv(data_filtered()[,.(auteur.nom,
+                                                       auteur.prenom,
+                                                       date_soutenance,
+                                                       discipline,
+                                                       titres.fr,
+                                                       nnt)],
+                                             label = "data_theses")
     }
   })
 
@@ -245,11 +285,26 @@ app_server <- function(input, output, session) {
     })
 
     output$exploration_donnees_ncn <- create_dt(noms_cn[[1]],length = 10)
+    output$download_ncn <- dl_button_serv(noms_cn[[1]],"nom_cn")
     output$exploration_donnees_pcn <- create_dt(noms_cn[[2]],length = 10)
+    output$download_pcn <- dl_button_serv(noms_cn[[2]],"prenoms_cn")
     output$exploration_donnees_techs <- create_dt(list_tech,length = 20)
+    output$download_techs <- dl_button_serv(list_tech,"techs")
     output$exploration_donnees_pathogenes <- create_dt(list_pathogenes,length = 20)
+    output$download_pathogenes <- dl_button_serv(list_pathogenes,"pathogenes")
     output$exploration_donnees_chems <- create_dt(list_chems,length = 20)
+    output$download_chems <- dl_button_serv(list_chems,"chems")
     output$exploration_donnees_vegs <- create_dt(list_vegs,length = 20)
+    output$download_vegs <- dl_button_serv(list_vegs,"vegs")
+
+    observe({
+      if(!filters_applied()){
+      output$exploration_donnees_theses <- create_dt(data(),length = 20)
+      } else{
+        output$exploration_donnees_theses <- create_dt(data_filtered(),length = 20)
+      }
+    })
+
 
 
 }

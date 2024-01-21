@@ -523,12 +523,23 @@ preprocess_data <- function(data = "data/theses-soutenues.fst") {
 
 
 
-  data_light <- data[, .SD, .SDcols = setdiff(names(data), c("resumes.fr","resumes.en"))]
+  data_light <- data[, .(discipline,
+                         chems,
+                         sujets.fr,
+                         vegs,
+                         pathogenes,
+                         techs,
+                         sujets_rameau,
+                         auteur.nom,
+                         auteur.prenom,
+                         date_soutenance,
+                         titres.fr,
+                         nnt)]
 
-  write_parquet(data,"data/theses-soutenues-compact.parquet")
-  write.fst(data,"data/theses-soutenues-compact.fst",compress = 100)
+  # write_parquet(data,"data/theses-soutenues-compact.parquet")
+  # write.fst(data,"data/theses-soutenues-compact.fst",compress = 100)
 
-  write_parquet(data[,.(resumes.en,resumes.fr)],"data/theses-resumes.parquet")
+  # write_parquet(data[,.(resumes.en,resumes.fr)],"data/theses-resumes.parquet")
 
   write.fst(data_light[,.N,discipline][order(N,decreasing = TRUE)],"data/nb_disciplines.fst")
   write.fst(data_light[,.N,chems][order(N,decreasing = TRUE)],"data/nb_chems.fst")
@@ -539,7 +550,9 @@ preprocess_data <- function(data = "data/theses-soutenues.fst") {
   write.fst(data_light[,.N,sujets_rameau][order(N,decreasing = TRUE)],"data/nb_sujets_rameau.fst")
 
   write.fst(data_light,"data/theses-soutenues-compact-light.fst",compress = 100)
-  write_parquet(data_light,"data/theses-soutenues-compact-light.parquet")
+  # write_parquet(data_light,"data/theses-soutenues-compact-light.parquet")
+
+
 
 
 }

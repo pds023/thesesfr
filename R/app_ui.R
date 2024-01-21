@@ -11,21 +11,10 @@ app_ui <- function(request) {
     # Your application UI logic
     page_fluid(
       theme =  bs_theme(),
+      includeCSS("inst/app/www/styles.css"),
       list(tags$head(HTML('<link rel="icon", href="www/logoapp.png",
-                                   type="image/png" />')),
-           tags$head(
-             tags$style(HTML("
-            @font-face {
-                font-family: 'Marianne';
-                src: url('www/Marianne-Regular.woff') format('woff');
-            }
-            body {
-                font-family: 'Marianne', sans-serif;
-            }
-        "))
-           ),
-        tags$head(
-          tags$style(HTML("hr {border-top: 1px solid #000000;}")))),
+                                   type="image/png" />'))
+          ),
       page_navbar(
         title=div(img(src="www/logopf.png", style="height:100px; width:100px;margin-bottom: -30px; border-radius: 50%"),
                   img(src="www/logoapp.png", style="height:100px; width:100px;margin-bottom: -30px; margin-right:30px; border-radius: 50%"),
@@ -42,7 +31,7 @@ app_ui <- function(request) {
         footer = tags$div(
           class = "footer",
           "Développé par ",
-          tags$a(href = "https://www.linkedin.com/in/philippe-fontaine-ds/", target = "_blank", "Philippe Fontaine"))
+          tags$a(href = "https://www.philippefontaine.eu/", target = "_blank", "Philippe Fontaine"))
       )
 
     )
