@@ -1,10 +1,9 @@
 Package: thesesfr
-Title: PKG_TITLE
+Title: Visualisation des thèses
 Version: 0.0.0.9000
-Authors@R: 
-    person("AUTHOR_FIRST", "AUTHOR_LAST", , "AUTHOR@MAIL.COM", role = c("cre", "aut"))
-Description: PKG_DESC.
-License: What license is it under?
+Authors@R: person('Philippe', 'Fontaine', email = 'philippe.fontaine.ds@proton.me', role = c('cre', 'aut'))
+Description: Visulation des thèses réalisées en France depuis 1985. Possibilité de filtrer sur divers éléments.
+License: MIT + file LICENSE
 Imports: 
     arrow,
     aws.s3,
