@@ -4,10 +4,10 @@
 \alias{create_radio}
 \title{Title}
 \usage{
-create_radio(id, type)
+create_radio(id, type, disabled_state = FALSE)
 }
 \arguments{
-\item{type}{}
+\item{id}{}
 }
 \description{
 Title

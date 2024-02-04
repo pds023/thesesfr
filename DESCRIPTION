@@ -1,8 +1,10 @@
 Package: thesesfr
 Title: Visualisation des thèses
 Version: 0.0.0.9000
-Authors@R: person('Philippe', 'Fontaine', email = 'philippe.fontaine.ds@proton.me', role = c('cre', 'aut'))
-Description: Visulation des thèses réalisées en France depuis 1985. Possibilité de filtrer sur divers éléments.
+Authors@R: 
+    person("Philippe", "Fontaine", , "philippe.fontaine.ds@proton.me", role = c("cre", "aut"))
+Description: Visulation des thèses réalisées en France depuis 1985.
+    Possibilité de filtrer sur divers éléments.
 License: MIT + file LICENSE
 Imports: 
     arrow,
@@ -18,7 +20,6 @@ Imports:
     highcharter,
     markdown,
     pinyin,
-    pkgload,
     plotly,
     shiny (>= 1.8.0),
     shinycssloaders,

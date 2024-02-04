@@ -4,7 +4,7 @@
 \alias{create_dt}
 \title{Title}
 \usage{
-create_dt(data, length = 5, cols_names = NULL)
+create_dt(data, length = 5, cols_names = NULL, select_cols = FALSE)
 }
 \arguments{
 \item{length}{}

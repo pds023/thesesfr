@@ -2,6 +2,7 @@
 
 export(chinese_names)
 export(create_dt)
+export(create_picker)
 export(create_radio)
 export(dl_button_serv)
 export(graph_compare)
