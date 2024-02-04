@@ -16,15 +16,14 @@ app_ui <- function(request) {
                                    type="image/png" />'))
           ),
       page_navbar(
-        title=div(img(src="www/logopf.png", style="height:100px; width:100px;margin-bottom: -30px; border-radius: 50%"),
-                  img(src="www/logoapp.png", style="height:100px; width:100px;margin-bottom: -30px; margin-right:30px; border-radius: 50%"),
-                  ""),
+        title="Thèses FR",
         nav_panel_exploration(),
         nav_menu_apropos(),
         nav_spacer(),
-        nav_item(actionBttn("suggestions",label = "Envoyez une suggestion",size = "xs")),
-        nav_menu("Notez-moi",
-                 nav_item(uiOutput("ratings"))),
+        nav_item(actionButton(inputId = "suggestions",label = "Une suggestion ?")),
+        nav_item(tags$a(shiny::icon("github"), "Thesesfr", href = "https://github.com/pds023/thesesfr", target = "_blank")),
+        nav_item(tags$a(shiny::icon("linkedin"), "philippe-fontaine-ds", href = "https://www.linkedin.com/in/philippe-fontaine-ds/", target = "_blank")),
+
         nav_item(input_dark_mode(mode = "light")),
         tags$style(".footer{position: fixed;bottom: 0;width: 100%;background-color: rgba(8, 60, 116, 1);color: white;text-align: center;padding: 5px;margin-left:-25px;}"),
         tags$style(".footer a{color: white;}"),

@@ -1,0 +1,12 @@
+name: thesesfr
+title: thesesfr
+username: philippefontaine
+account: philippefontaine
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 10983660
+bundleId: 8167749
+url: https://philippefontaine.shinyapps.io/thesesfr/
+version: 1
+asMultiple: FALSE
+asStatic: FALSE

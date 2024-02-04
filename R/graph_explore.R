@@ -19,7 +19,7 @@ graph_explore <- function(data,
     colnames(data) <- c("var","N")
     data[,pct := round(N/sum(N),2)]
     if(input_type %in% "bar"){
-      if(input_pct %in% "nb") {
+      if(input_pct %in% "niv") {
         return(hchart(data[1:nb_lignes], type = "bar",hcaes(x = var, y = N)))
       } else {
         return(hchart(data[1:nb_lignes], type = "bar",hcaes(x = var, y = pct)))
@@ -32,7 +32,7 @@ graph_explore <- function(data,
     colnames(data) <- c("agreg","var","N")
     data[,pct := round(N/sum(N),2)]
     if(input_type %in% "bar"){
-      if(input_pct %in% "nb") {
+      if(input_pct %in% "niv") {
         return(hchart(data[1:nb_lignes], type = "bar",hcaes(x = var, y = N, group = agreg)))
       } else {
         return(hchart(data[1:nb_lignes], type = "bar",hcaes(x = var, y = pct, group = agreg)))

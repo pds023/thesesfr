@@ -15,19 +15,26 @@ nav_panel_exploration <- function() {
                                     value = "panel_exploration_vuedensemble",
                                     fluidRow(
                                       column(6,
-                                             card(card_header("Disciplines"),height = "575px",min_height = "575px",
+                                             card(full_screen = TRUE,fill = FALSE,
+                                                  card_title(div(class = "card-title-container",
+                                                                 div(class = "title-tooltip","Disciplines"),
+                                                                 div(class = "radio-group-buttons",
+                                                                     create_radio("highchart_stats_pct","pct")))),
+                                                  # height = "575px",min_height = "575px",
                                                   card_body(
-                                                    withSpinner(highchartOutput("highchart_stats_disciplines")),
-                                                    fluidRow(
-                                                      column(4,create_radio("highchart_stats_disciplines_type","type")),
-                                                      column(4,create_radio("highchart_stats_disciplines_pct","pct"))))
+                                                    withSpinner(highchartOutput("highchart_stats_disciplines"))
+                                                  ),
+                                                  card_footer(create_radio("highchart_stats_type","graph"))
                                              )),
                                       column(6,
-                                             card(card_header("Analyse temporelle",
-                                                              tooltip(
-                                                                bs_icon("info-circle"),
-                                                                "MMn : moyenne mobile d'ordre n"
-                                                              )),height = "575px",min_height = "575px",
+                                             card(full_screen = TRUE,fill = FALSE,
+                                                  # height = "575px", min_height = "575px",
+                                                  card_title(div(class = "card-title-container",
+                                                                 div(class = "title-tooltip","Analyse temporelle",
+                                                                     tooltip(
+                                                                       bs_icon("info-circle"),
+                                                                       "MMn : moyenne mobile d'ordre n"
+                                                                     )))),
                                                   card_body(
                                                     navset_card_underline(nav_panel(title = "Données brutes",
                                                                                     withSpinner(highchartOutput("exploration_timegraph"))),
@@ -39,9 +46,11 @@ nav_panel_exploration <- function() {
                                                                                     withSpinner(plotlyOutput("exploration_timegraph_seasonal"))))
                                                   )
                                              ))
-                                    )
-                                    ,
-                                    card(card_header("Données détaillées"),min_height = "300px",
+                                    ),
+                                    card(full_screen = TRUE,fill = FALSE,
+                                         # min_height = "300px",
+                                         card_title(div(class = "card-title-container",
+                                                        div(class = "title-tooltip","Données détaillées"))),
                                          card_body(
                                            DTOutput("exploration_donnees_brutes"),
                                          ),
@@ -51,27 +60,39 @@ nav_panel_exploration <- function() {
                           nav_panel(title = "Données utilisées",icon = bs_icon("database"),
                                     navset_card_underline(
                                       nav_panel(title = "CN",
-                                                card(card_header("Noms"),
-                                                     DTOutput("exploration_donnees_ncn"),
+                                                card(full_screen = TRUE,
+                                                     card_title("Noms retenus"),
+                                                     card_body(DTOutput("exploration_donnees_ncn")),
                                                      card_footer(downloadButton("download_ncn",label = "Télécharger"))),
-                                                card(card_header("Prénoms"),
-                                                     DTOutput("exploration_donnees_pcn"),
+                                                card(full_screen = TRUE,
+                                                     card_title("Prénoms retenus"),
+                                                     card_body(DTOutput("exploration_donnees_pcn")),
                                                      card_footer(downloadButton("download_pcn",label = "Télécharger")))),
                                       nav_panel(title = "Technologies",
-                                                DTOutput("exploration_donnees_techs"),
-                                                card_footer(downloadButton("download_techs",label = "Télécharger"))),
+                                                card(full_screen = TRUE,fill = FALSE,
+                                                     card_title("Listes des technologies retenues"),
+                                                     card_body(DTOutput("exploration_donnees_techs")),
+                                                     card_footer(downloadButton("download_techs",label = "Télécharger")))),
                                       nav_panel(title = "Pathogènes",
-                                                DTOutput("exploration_donnees_pathogenes"),
-                                                card_footer(downloadButton("download_pathogenes",label = "Télécharger"))),
+                                                card(full_screen = TRUE,fill = FALSE,
+                                                  card_title("Liste des pathogènes retenus"),
+                                                  card_body(DTOutput("exploration_donnees_pathogenes")),
+                                                  card_footer(downloadButton("download_pathogenes",label = "Télécharger")))),
                                       nav_panel(title = "Précurseurs",
-                                                DTOutput("exploration_donnees_chems"),
-                                                card_footer(downloadButton("download_chems",label = "Télécharger"))),
+                                                card(full_screen = TRUE,fill = FALSE,
+                                                  card_title("Liste des précurseurs retenus"),
+                                                  card_body(DTOutput("exploration_donnees_chems")),
+                                                  card_footer(downloadButton("download_chems",label = "Télécharger")))),
                                       nav_panel(title = "Végétaux",
-                                                DTOutput("exploration_donnees_vegs"),
-                                                card_footer(downloadButton("download_vegs",label = "Télécharger"))),
+                                                card(full_screen = TRUE,fill = FALSE,
+                                                     card_title("Liste des végétaux retenus"),
+                                                     card_body(DTOutput("exploration_donnees_vegs")),
+                                                     card_footer(downloadButton("download_vegs",label = "Télécharger")))),
                                       nav_panel(title = "Thèses",
-                                                DTOutput("exploration_donnees_theses"),
-                                                card_footer(downloadButton("download_theses",label = "Télécharger")))
+                                                card(full_screen = TRUE,fill = FALSE,
+                                                     card_title("Données brutes utilisées"),
+                                                     card_body(DTOutput("exploration_donnees_theses")),
+                                                     card_footer(downloadButton("download_theses",label = "Télécharger"))))
                                     )
                           )
               )

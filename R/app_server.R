@@ -13,7 +13,6 @@ app_server <- function(input, output, session) {
   data_filtered <- reactiveVal()
   data_disciplines <- reactiveVal()
   filters_applied <- reactiveVal(FALSE)
-  nb_rating <- reactiveVal(0)
 
   nb_disciplines <- reactiveVal()
   nb_chems <- reactiveVal()
@@ -40,11 +39,6 @@ app_server <- function(input, output, session) {
 
   data(as.data.table(read.fst(path = "data/theses-soutenues-compact-light.fst")))
 
-  ratings <- s3read_using(
-    read_parquet,
-    object = "ratings.parquet",
-    bucket = "awsbucketpf/thesesfr"
-  )
   suggestions <- s3read_using(
     read_parquet,
     object = "suggestions.parquet",
@@ -57,30 +51,6 @@ app_server <- function(input, output, session) {
   })
   output$apropos <- renderText({
     includeMarkdown("inst/app/www/apropos.md")
-  })
-
-  output$ratings <- renderUI(shinyRatings("ratings_click", no_of_stars = 5, default = 5, disabled = FALSE))
-
-
-  observeEvent(input$ratings_click,{
-    if(nb_rating() > 0){
-      if(input$ratings_click >= 4){showModal(modalDialog("Merci pour cette bonne note ! N'hésitez pas à proposer des suggestions :)",
-                                                         easyClose = TRUE,size = "s"))
-      } else if(input$ratings_click >= 2.5){showModal(modalDialog("Merci pour ce retour ! N'hésitez pas à proposer des suggestions pour améliorer l'expérience utilisateur !",
-                                                                  easyClose = TRUE,size = "s"))
-      } else{showModal(modalDialog("Merci pour ce retour, et toutes mes excuses pour l'expérience peu satisfaisante. N'hésitez pas à proposer des suggestions pour améliorer l'expérience utilisateur.",
-                                   easyClose = TRUE,size = "s"))
-      }
-      print(input$ratings_click)
-      ratings <- as.data.table(rbind(ratings,cbind(as.character(Sys.Date()),input$ratings_click)))
-      s3write_using(
-        x = ratings,
-        FUN = write_parquet,
-        object = "ratings.parquet",
-        bucket = "awsbucketpf/thesesfr"
-      )
-      }
-    nb_rating(nb_rating() + 1)
   })
 
   observeEvent(input$suggestions,{
@@ -193,11 +163,9 @@ app_server <- function(input, output, session) {
 
   # Highcharts graphs tab1 ----------------
   observe({
-    req(input$highchart_stats_disciplines_type)
-    req(input$highchart_stats_disciplines_pct)
     output$highchart_stats_disciplines <- renderHighchart(graph_explore(data = data_disciplines(),
-                                                                       input_type = input$highchart_stats_disciplines_type,
-                                                                       input_pct = input$highchart_stats_disciplines_pct))
+                                                                       input_type = input$highchart_stats_type,
+                                                                       input_pct = input$highchart_stats_pct))
   })
 
   observe({
@@ -305,6 +273,15 @@ app_server <- function(input, output, session) {
       }
     })
 
+
+    observe({
+      req(input$highchart_stats_type)
+      if(input$highchart_stats_type %in% "pie"){
+        updateRadioGroupButtons(session = session,inputId = "highchart_stats_pct", selected = "niv",disabled = TRUE)
+      } else{
+        updateRadioGroupButtons(session = session,inputId = "highchart_stats_pct",disabled = FALSE)
+      }
+    })
 
 
 }
