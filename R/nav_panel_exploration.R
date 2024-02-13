@@ -22,7 +22,7 @@ nav_panel_exploration <- function() {
                                                                      create_radio("highchart_stats_pct","pct")))),
                                                   # height = "575px",min_height = "575px",
                                                   card_body(
-                                                    withSpinner(highchartOutput("highchart_stats_disciplines"))
+                                                    highchartOutput("highchart_stats_disciplines")
                                                   ),
                                                   card_footer(create_radio("highchart_stats_type","graph"))
                                              )),
@@ -37,13 +37,13 @@ nav_panel_exploration <- function() {
                                                                      )))),
                                                   card_body(
                                                     navset_card_underline(nav_panel(title = "Données brutes",
-                                                                                    withSpinner(highchartOutput("exploration_timegraph"))),
+                                                                                    highchartOutput("exploration_timegraph")),
                                                                           nav_panel(title = "Saisonnalité",
                                                                                     pickerInput(inputId = "select_seasonal",
                                                                                                 choices = c("Hebdomadaire","Mensuel",
                                                                                                             "Trimestriel","Annuel"),
                                                                                                 selected = "Hebdomadaire"),
-                                                                                    withSpinner(plotlyOutput("exploration_timegraph_seasonal"))))
+                                                                                    plotlyOutput("exploration_timegraph_seasonal")))
                                                   )
                                              ))
                                     ),
