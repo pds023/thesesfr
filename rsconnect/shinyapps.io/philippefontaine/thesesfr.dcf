@@ -5,7 +5,7 @@ account: philippefontaine
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 10983660
-bundleId: 8217267
+bundleId:
 url: https://philippefontaine.shinyapps.io/thesesfr/
 version: 1
 asMultiple: FALSE

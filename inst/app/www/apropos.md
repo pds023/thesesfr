@@ -15,6 +15,7 @@
 * [DT](https://rstudio.github.io/DT/)
 #### F
 * Mark Klik, [fst: Lightning Fast Serialization of Data Frames](http://www.fstpackage.org)
+#### G
 * Colin Fay and Vincent Guyader and Sébastien Rochette and Cervan Girard, [golem: A Framework for Robust Shiny Applications](https://github.com/ThinkR-open/golem)
 #### H
 * Joshua Kunst, [highcharter: A Wrapper for the 'Highcharts' Library](https://jkunst.com/highcharter/)

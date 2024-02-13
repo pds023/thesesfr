@@ -23,7 +23,6 @@ Imports:
     plotly,
     sever,
     shiny (>= 1.8.0),
-    shinyRatings,
     shinyWidgets,
     stringr,
     timetk,
