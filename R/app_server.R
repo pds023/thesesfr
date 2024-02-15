@@ -7,7 +7,17 @@
 app_server <- function(input, output, session) {
   options(warn = -1)
 
+  telemetry$start_session(track_values = TRUE)
+
   source("set_cfg.R")
+
+  session$onSessionEnded(function() {
+    put_object(
+      file = "telemetry.sqlite",
+      bucket = "awsbucketpf/thesesfr",
+      object = "telemetry.sqlite"
+    )
+  })
 
   disconnected <- tagList(
     h1("Oups, quelque chose s'est mal passé !"),
